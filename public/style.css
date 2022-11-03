@@ -58,6 +58,30 @@ body {
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 }
 
+.left .new {
+	display: flex;
+	width: 100%;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+.left .new .title {
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	padding: 0.5em;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+.left .new .item {
+	display: flex;
+	width: 100%;
+	padding: 0.5em;
+	justify-content: center;
+	align-items: center;
+	color: #c0c0c0;
+	background-color: #404040;
+}
+
 .left .list {
 	display: flex;
 	flex-direction: column;

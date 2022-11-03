@@ -10,8 +10,17 @@ var server = http.createServer(app);
 
 var io = new socketio.Server(server);
 
+var windows = [];
+
 io.on("connection", function(socket) {
 	console.log("Connected:", socket.id);
+
+	socket.on("window", function(callback) {
+
+		windows.push({id: socket.id});
+		
+		callback(windows.length);
+	});
 
 	socket.on("disconnect", function() {
 		console.log("Disconnected:", socket.id);
@@ -51,13 +60,17 @@ app.get("/read/*", function(req, res) {
 	console.log(name);
 
 	var file = fs.readFileSync(name);
+
+	console.log(file);
 });
 
 app.post("/write/*", function(req, res) {
 	var name = req.url.split("/")[1];
 	console.log(name);
 
-	var files = fs.writeFileSync(name);
+	var file = fs.writeFileSync(name);
+
+	console.log(file);
 });
 
 function verifyCache(dir) {

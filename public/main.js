@@ -7,7 +7,9 @@ const Right = document.querySelector(".right");
 var socket = io();
 
 socket.on("connect", function() {
-
+	socket.emit("code", function(index) {
+		console.log(index);
+	});
 });
 
 function iterate(container, list, prefix) {
@@ -16,7 +18,7 @@ function iterate(container, list, prefix) {
 
 		k.textContent = prefix + "/" + list[i].name;
 
-		container.append(k)
+		container.append(k);
 
 		if (list[i].type == "dir") {
 			k.classList.add("dir");
