@@ -1,8 +1,6 @@
-const socketio = require("socket.io");
-const express = require("express");
-const path = require("path");
-const http = require("http");
-const fs = require("fs");
+import express from "express";
+import Router from "./router.js";
+import Util from "./util.js";
 
 var app = express();
 
@@ -10,25 +8,30 @@ var server = http.createServer(app);
 
 var io = new socketio.Server(server);
 
-var windows = [];
+var windows = {};
 
 io.on("connection", function(socket) {
 	console.log("Connected:", socket.id);
 
-	socket.on("window", function(callback) {
+	socket.windows = [];
 
-		windows.push({id: socket.id});
-		
-		callback(windows.length);
+	socket.on("windowOpen", function(callback) {
+		callback();
+	});
+
+	socket.on("windowClose", function() {
+
 	});
 
 	socket.on("disconnect", function() {
 		console.log("Disconnected:", socket.id);
+
+		for (var i = 0; )
 	});
 });
 
 app.get("/", function(req, res) {
-	res.sendFile(path.join(__dirname, "public", "index.html"));
+	res.sendFile(path.join(__dirname, "main", "index.html"));
 });
 
 var cache = {};
@@ -50,28 +53,6 @@ function listDir(dir) {
 
 	return r;
 }
-
-app.get("/dir", function(req, res) {
-	res.send(listDir(path.join(__dirname, "playground")));
-});
-
-app.get("/read/*", function(req, res) {
-	var name = req.url.split("/")[1];
-	console.log(name);
-
-	var file = fs.readFileSync(name);
-
-	console.log(file);
-});
-
-app.post("/write/*", function(req, res) {
-	var name = req.url.split("/")[1];
-	console.log(name);
-
-	var file = fs.writeFileSync(name);
-
-	console.log(file);
-});
 
 function verifyCache(dir) {
 	var files = fs.readdirSync(dir);
@@ -101,49 +82,7 @@ app.get("/reload", function(req, res) {
 	return res.send({reload: verifyCache(__dirname)});
 });
 
-app.get("/reload.js", function(req, res) {
-	return res.sendFile(path.join(__dirname, "public", "reload.js"));
-});
-
-app.get("/reload.css", function(req, res) {
-	return res.sendFile(path.join(__dirname, "public", "reload.css"));
-});
-
-app.get("/main.js", function(req, res) {
-	return res.sendFile(path.join(__dirname, "public", "main.js"));
-});
-
-app.get("/code.js", function(req, res) {
-	return res.sendFile(path.join(__dirname, "public", "code.js"));
-});
-
-app.get("/style.css", function(req, res) {
-	return res.sendFile(path.join(__dirname, "public", "style.css"));
-});
-
-app.get("/whitney.woff", function(req, res) {
-	return res.sendFile(path.join(__dirname, "public", "whitney.woff"));
-});
-
-app.get("/keyboard", function(req, res) {
-	return res.sendFile(path.join(__dirname, "public", "keyboard.html"));
-});
-
-app.get("/keyboard.css", function(req, res) {
-	return res.sendFile(path.join(__dirname, "public", "keyboard.css"));
-});
-
-app.get("/keyboard.js", function(req, res) {
-	return res.sendFile(path.join(__dirname, "public", "keyboard.js"));
-});
-
-app.get("/socket.io.js", function(req, res) {
-	return res.sendFile(path.join(__dirname, "public", "socket.io.js"));
-});
-
-app.get("/socket.io.js.map", function(req, res) {
-	return res.sendFile(path.join(__dirname, "public", "socket.io.js.map"));
-});
+Router.Init();
 
 server.listen(4000, function() {
 	console.log("Ready");
