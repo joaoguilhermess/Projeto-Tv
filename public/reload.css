@@ -1,0 +1,22 @@
+.reloading {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	left: 0;
+	top: 0;
+	justify-content: center;
+	align-items: center;
+	color: #ffffff;
+	background-color: #000000a0;
+	font-size: 1.5em;
+	font-weight: 700;
+	font-family: monospace;
+	letter-spacing: 0.25em;
+	transition-duration: 0.5s;
+}
+
+.reloading.hidden {
+	display: none;
+	opacity: 0;
+}
